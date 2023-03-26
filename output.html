@@ -1,0 +1,165 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 95vh;
+                 background-color: #222222;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "font": {"color": "white"}, "id": "China Growth Rate", "label": "China Growth Rate", "shape": "dot", "size": 10, "title": "China Growth Rate"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Competitors Marketing", "label": "Competitors Marketing", "shape": "dot", "size": 10, "title": "Competitors Marketing"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Competitors Sale Price", "label": "Competitors Sale Price", "shape": "dot", "size": 10, "title": "Competitors Sale Price"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Competitors Sales Quantity", "label": "Competitors Sales Quantity", "shape": "dot", "size": 10, "title": "Competitors Sales Quantity"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Customers Revenue", "label": "Customers Revenue", "shape": "dot", "size": 10, "title": "Customers Revenue"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Demand for Product", "label": "Demand for Product", "shape": "dot", "size": 10, "title": "Demand for Product"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Number of Competitors", "label": "Number of Competitors", "shape": "dot", "size": 10, "title": "Number of Competitors"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Number of Customers", "label": "Number of Customers", "shape": "dot", "size": 10, "title": "Number of Customers"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "PlanetEco Expenses", "label": "PlanetEco Expenses", "shape": "dot", "size": 10, "title": "PlanetEco Expenses"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "PlanetEco Inventory Size", "label": "PlanetEco Inventory Size", "shape": "dot", "size": 10, "title": "PlanetEco Inventory Size"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "PlanetEco Marketing", "label": "PlanetEco Marketing", "shape": "dot", "size": 10, "title": "PlanetEco Marketing"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "PlanetEco Operational Cost", "label": "PlanetEco Operational Cost", "shape": "dot", "size": 10, "title": "PlanetEco Operational Cost"}, {"color": "orange", "font": {"color": "white"}, "id": "PlanetEco Profit", "label": "PlanetEco Profit", "shape": "dot", "size": 10, "title": "PlanetEco Profit"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "PlanetEco Purchasing Cost", "label": "PlanetEco Purchasing Cost", "shape": "dot", "size": 10, "title": "PlanetEco Purchasing Cost"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "PlanetEco Revenue", "label": "PlanetEco Revenue", "shape": "dot", "size": 10, "title": "PlanetEco Revenue"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "PlanetEco Sale Price", "label": "PlanetEco Sale Price", "shape": "dot", "size": 10, "title": "PlanetEco Sale Price"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "PlanetEco Sales Quantity", "label": "PlanetEco Sales Quantity", "shape": "dot", "size": 10, "title": "PlanetEco Sales Quantity"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Supplementary Good Cost", "label": "Supplementary Good Cost", "shape": "dot", "size": 10, "title": "Supplementary Good Cost"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Suppliers Sale Price", "label": "Suppliers Sale Price", "shape": "dot", "size": 10, "title": "Suppliers Sale Price"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Suppliers Sales Quantity", "label": "Suppliers Sales Quantity", "shape": "dot", "size": 10, "title": "Suppliers Sales Quantity"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "Tax", "label": "Tax", "shape": "dot", "size": 10, "title": "Tax"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "UAE Exchange Rate", "label": "UAE Exchange Rate", "shape": "dot", "size": 10, "title": "UAE Exchange Rate"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "UAE Growth Rate", "label": "UAE Growth Rate", "shape": "dot", "size": 10, "title": "UAE Growth Rate"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "UAE Inflation", "label": "UAE Inflation", "shape": "dot", "size": 10, "title": "UAE Inflation"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "UAE Interest Rate", "label": "UAE Interest Rate", "shape": "dot", "size": 10, "title": "UAE Interest Rate"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "UAE Oil Sale Price", "label": "UAE Oil Sale Price", "shape": "dot", "size": 10, "title": "UAE Oil Sale Price"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "US Exchange Rate", "label": "US Exchange Rate", "shape": "dot", "size": 10, "title": "US Exchange Rate"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "US Growth Rate", "label": "US Growth Rate", "shape": "dot", "size": 10, "title": "US Growth Rate"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "US Inflation", "label": "US Inflation", "shape": "dot", "size": 10, "title": "US Inflation"}, {"color": "#97c2fc", "font": {"color": "white"}, "id": "US Interest Rate", "label": "US Interest Rate", "shape": "dot", "size": 10, "title": "US Interest Rate"}]);
+                  edges = new vis.DataSet([{"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "China Growth Rate", "to": "UAE Growth Rate"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "China Growth Rate", "to": "US Growth Rate"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Competitors Marketing", "to": "Competitors Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "Competitors Sale Price", "to": "Competitors Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Competitors Sale Price", "to": "PlanetEco Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Competitors Sales Quantity", "to": "Suppliers Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "Competitors Sales Quantity", "to": "Competitors Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "Competitors Sales Quantity", "to": "PlanetEco Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Customers Revenue", "to": "Demand for Product"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Demand for Product", "to": "Competitors Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Demand for Product", "to": "PlanetEco Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Demand for Product", "to": "Competitors Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Demand for Product", "to": "PlanetEco Inventory Size"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Demand for Product", "to": "PlanetEco Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "Number of Competitors", "to": "Competitors Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Number of Customers", "to": "Demand for Product"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "PlanetEco Expenses", "to": "PlanetEco Profit"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Inventory Size", "to": "PlanetEco Operational Cost"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Inventory Size", "to": "PlanetEco Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Marketing", "to": "PlanetEco Expenses"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Marketing", "to": "PlanetEco Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Operational Cost", "to": "PlanetEco Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Purchasing Cost", "to": "PlanetEco Expenses"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Purchasing Cost", "to": "PlanetEco Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Revenue", "to": "PlanetEco Profit"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Sale Price", "to": "Competitors Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Sale Price", "to": "PlanetEco Revenue"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "PlanetEco Sale Price", "to": "PlanetEco Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Sales Quantity", "to": "Suppliers Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "PlanetEco Sales Quantity", "to": "Competitors Sales Quantity"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "PlanetEco Sales Quantity", "to": "PlanetEco Inventory Size"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "PlanetEco Sales Quantity", "to": "PlanetEco Revenue"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "PlanetEco Sales Quantity", "to": "PlanetEco Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "Supplementary Good Cost", "to": "Demand for Product"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Suppliers Sale Price", "to": "PlanetEco Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "Suppliers Sales Quantity", "to": "Suppliers Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Tax", "to": "Suppliers Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Tax", "to": "Competitors Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Tax", "to": "PlanetEco Operational Cost"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Tax", "to": "PlanetEco Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "Tax", "to": "Supplementary Good Cost"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Exchange Rate", "to": "Suppliers Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Exchange Rate", "to": "Competitors Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Exchange Rate", "to": "Customers Revenue"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Exchange Rate", "to": "PlanetEco Profit"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Exchange Rate", "to": "PlanetEco Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Growth Rate", "to": "Demand for Product"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Growth Rate", "to": "UAE Inflation"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Inflation", "to": "Suppliers Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Inflation", "to": "Competitors Sale Price"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "UAE Inflation", "to": "PlanetEco Profit"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Inflation", "to": "PlanetEco Purchasing Cost"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Inflation", "to": "Supplementary Good Cost"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Inflation", "to": "UAE Interest Rate"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "UAE Interest Rate", "to": "Demand for Product"}, {"arrowStrikethrough": false, "arrows": "to", "color": "red", "from": "UAE Interest Rate", "to": "UAE Inflation"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "UAE Oil Sale Price", "to": "UAE Inflation"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "US Exchange Rate", "to": "UAE Exchange Rate"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "US Growth Rate", "to": "UAE Growth Rate"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "US Inflation", "to": "UAE Inflation"}, {"arrowStrikethrough": false, "arrows": "to", "color": "green", "from": "US Interest Rate", "to": "UAE Interest Rate"}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "discrete"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": true,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "repulsion": {
+            "centralGravity": 0.2,
+            "damping": 0.09,
+            "nodeDistance": 100,
+            "springConstant": 0.05,
+            "springLength": 200
+        },
+        "solver": "repulsion",
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+                    network.on("click", neighbourhoodHighlight);
+                  
+
+                  
+
+                  
+
+
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
